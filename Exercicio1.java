@@ -1,58 +1,89 @@
-import java.util.Scanner;
+package com.mycompany.exercicio1;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Node {
+    int value;
+    Node left, right;
+
+    Node(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
 
 public class Exercicio1 {
+    Node root;
 
-    // metodo para inverter o vetor
-    public static void inverterVetor(int[] vetor, int N) {
-        int inicio = 0;
-        int fim = N - 1;
-
-        while (inicio < fim) {
-            // troca os elementos
-            int temp = vetor[inicio];
-            vetor[inicio] = vetor[fim];
-            vetor[fim] = temp;
-
-            // move os índices
-            inicio++;
-            fim--;
+    // Pré-ordem: raiz → esquerda → direita
+    void preOrder(Node node) {
+        if (node != null) {
+            System.out.print(node.value + " ");
+            preOrder(node.left);
+            preOrder(node.right);
         }
     }
 
-    // metodo para exibir o vetor
-    public static void exibirVetor(int[] vetor, int N) {
-        for (int i = 0; i < N; i++) {
-            System.out.print(vetor[i] + " ");
+    // Em-ordem: esquerda → raiz → direita
+    void inOrder(Node node) {
+        if (node != null) {
+            inOrder(node.left);
+            System.out.print(node.value + " ");
+            inOrder(node.right);
         }
-        System.out.println();
+    }
+
+    // Pós-ordem: esquerda → direita → raiz
+    void postOrder(Node node) {
+        if (node != null) {
+            postOrder(node.left);
+            postOrder(node.right);
+            System.out.print(node.value + " ");
+        }
+    }
+
+    // Em nível (Level-order): por nível da árvore
+    void levelOrder(Node node) {
+        if (node == null) return;
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            System.out.print(current.value + " ");
+
+            if (current.left != null) queue.add(current.left);
+            if (current.right != null) queue.add(current.right);
+        }
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Exercicio1 tree = new Exercicio1();
 
-        // le a quantidade de elementos do vetor
-        System.out.print("Digite o número de elementos do vetor: ");
-        int N = scanner.nextInt();
+        // Construindo a árvore corrigida
+        tree.root = new Node(12);
+        tree.root.left = new Node(6);
+        tree.root.right = new Node(15);
+        tree.root.left.left = new Node(4);
+        tree.root.left.right = new Node(7);
+        tree.root.right.right = new Node(13); // Apenas o 13 como filho de 15
 
-        // cria o vetor com base no número de elementos
-        int[] vetor = new int[N];
+        System.out.print("Pré-ordem: ");
+        tree.preOrder(tree.root);
+        System.out.println();
 
-        // le os elementos do vetor
-        System.out.println("Digite os elementos do vetor:");
-        for (int i = 0; i < N; i++) {
-            vetor[i] = scanner.nextInt();
-        }
+        System.out.print("Em-ordem: ");
+        tree.inOrder(tree.root);
+        System.out.println();
 
-        // exibe o vetor original
-        System.out.println("Vetor original:");
-        exibirVetor(vetor, N);
+        System.out.print("Pós-ordem: ");
+        tree.postOrder(tree.root);
+        System.out.println();
 
-        // inverte o vetor
-        inverterVetor(vetor, N);
-
-        // exibe o vetor invertido
-        System.out.println("Vetor invertido:");
-        exibirVetor(vetor, N);
-
+        System.out.print("Em nível: ");
+        tree.levelOrder(tree.root);
+        System.out.println();
     }
 }
